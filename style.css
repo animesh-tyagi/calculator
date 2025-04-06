@@ -1,0 +1,46 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    font-family: "Lucida Console",Monospace;
+}  
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    font-size: 32px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+
+}
+
+button {
+    height: 40px;
+    width: 40px;
+    border-radius: 8px;
+}
+
+.calculator {
+    
+    display: flex;
+    
+}
+
+.buttons {
+    width: 250px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 8px;
+
+}
