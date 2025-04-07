@@ -26,7 +26,6 @@ function mod(a,b) {
     }
     return Number(a)%Number(b);
 }
-console.log(mod(10,3));
 
 //operate function
 function operate(a,b,op) {
@@ -48,46 +47,70 @@ function operate(a,b,op) {
 let num1;
 let num2;
 let op;
+let dec = false;
+let counter;
 
 //screen selector
-let screen = document.querySelector(".screen");
+const screen = document.querySelector(".screen");
+
+function format(num) {
+    return Number(num.toFixed(6));
+}
 
 //Event Listener for number buttons
-let numBtns = document.querySelectorAll(".num");
+const numBtns = document.querySelectorAll(".num");
 numBtns.forEach((btn) => {
     btn.addEventListener("click", ()=> {
+
+        if(dec===true) {
+            if(num1!=undefined && num2===undefined) {
+                console.log(counter+1);
+                num1 = num1 + (Number(btn.innerHTML)*(10**(-(counter+1))));
+                counter +=1;;
+                screen.textContent = format(num1);
+                return;
+            } else if(num1!=undefined && op!=undefined && num2!=undefined) {
+                num2 = num2 + (Number(btn.innerHTML)*(10**(-(counter+1))));
+                counter +=1;
+                screen.textContent = format(num2);
+                return;
+            }
+        }
+
         if(num1===undefined || (num1===undefined && op==="=")) {
             num1=Number(btn.innerHTML);
             op = undefined;
-            screen.textContent= num1.toString();
+            screen.textContent= format(num1);
         } else if(num1!=undefined && op===undefined) {
             num1 = num1*10 + Number(btn.innerHTML);
-            screen.textContent= num1.toString();
+            screen.textContent= format(num1);
         }
         else if(num1!=undefined && op!=undefined && num2===undefined) {
             num2=Number(btn.innerHTML);
-            screen.textContent= num2.toString();
+            screen.textContent= format(num2);
         } else if(num1!=undefined && op!=undefined && num2!=undefined) {
             num2 = num2*10 + Number(btn.innerHTML);
-            screen.textContent= num2.toString();
+            screen.textContent= format(num2);
         }
     })
 });
 
 //Event listener for operator buttons
-let opBtns = document.querySelectorAll(".op");
+const opBtns = document.querySelectorAll(".op");
 opBtns.forEach((opBtn) => {
     opBtn.addEventListener("click",() => {
+        dec = false;
+        counter = 0;
         if(num1===undefined && op==="=") {
             num1 = Number(screen.textContent);
             op = opBtn.innerHTML;
             return;
-        }else if(num1===undefined && op!="=") {
+        } else if(num1===undefined && op!="=") {
             alert("Enter number first");
             return;
         } else if(num2 !=undefined && op!=undefined) {
             num1 = operate(num1,num2,op);
-            screen.textContent = num1;
+            screen.textContent = format(num1);
             op = opBtn.innerHTML;
             num2 = undefined;
             return;
@@ -96,19 +119,21 @@ opBtns.forEach((opBtn) => {
             return;
         }
         op = opBtn.innerHTML;
+
     })
 });
 
 
 // '=' event listener
-let eq = document.querySelector("#eq");
+const eq = document.querySelector("#eq");
 eq.addEventListener("click",() => {
     if(num1 === undefined || op === undefined || num2 ===undefined) {
         alert("Not a valid expression to evaluate");
         return;
     } else {
         let res = operate(num1,num2,op);
-        screen.textContent=res;
+        screen.textContent=format(res);
+        dec = false;
         num1 = undefined;
         num2 = undefined;
         op = "=";
@@ -123,7 +148,7 @@ ac.addEventListener("click",() => {
     num1 = undefined;
     num2 = undefined;
     op = undefined;
-    screen.textContent = ''
+    screen.textContent = '0'
 });
 
 //fucntion to check the length of the digit
@@ -142,14 +167,14 @@ del.addEventListener("click",() => {
         } else {
             num1 = undefined;
         }
-        screen.textContent=num1;
+        screen.textContent=format(num1);
     } else if(num1!=undefined && num2!=undefined) {
         if (lenDigit(num2) > 1) {
             num2 = Math.floor(num2/10);
         } else {
             num2 = undefined;
         }
-        screen.textContent=num2;
+        screen.textContent=format(num2);
     }
 });
 
@@ -161,19 +186,33 @@ sign.addEventListener("click", () => {
         return;
     } else if(num1!= undefined && op===undefined && num2===undefined){
         num1 = -1*num1;
-        screen.textContent = num1;
+        screen.textContent = format(num1);
     } else if(num1!=undefined && num2!=undefined && op!=undefined) {
         num2 = -1*num2;
-        screen.textContent = num2;
+        screen.textContent = format(num2);
     } else if(num1===undefined && op==="=" && num2 ===undefined) {
         num1 = screen.innerHTML;
         num1 = -1*num1;
-        screen.textContent = num1;
+        screen.textContent = format(num1);
     }
 });
 
-    
-
-
-
-
+//'.' button event listener
+const point = document.querySelector("#point");
+point.addEventListener("click", ()=> {
+    counter = 0;
+    dec = true;
+    if(num1!=undefined && num2===undefined) {
+        op = undefined;
+        screen.textContent = num1+'.';
+    } else if(num1 === undefined ) {
+        op = undefined;
+        num1 = 0;
+        screen.textContent = 0+'.';
+    } else if(num1!=undefined && op!=undefined && num2===undefined) {
+        num2 = 0;
+        screen.textContent = 0+'.';
+    } else if(num1!=undefined && op!=undefined && num2!=undefined) {
+        screen.textContext = num2+'.';
+    }
+});
